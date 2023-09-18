@@ -1,0 +1,54 @@
+﻿@model List<TMS_APP.Models.DTO.UserWithRolesViewModel>
+
+@{
+    ViewData["Title"] = "Driver Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Driver Management</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>FirstName</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>PhoneNumber</th>
+            <th>PayRate</th>
+            <th>Availability</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var driver in Model  )
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => driver.FirstName)</td>
+                <td>@Html.DisplayFor(modelItem => driver.LastName)</td>
+                <td>@Html.DisplayFor(modelItem => driver.Email)</td>
+                <td>@Html.DisplayFor(modelItem => driver.PhoneNumber)</td>
+                <td>@Html.DisplayFor(modelItem => driver.PayRate)</td>
+                <td class="">@Html.DisplayFor(modelItem => driver.Availability)</td>
+                <td>
+                    <form asp-action="UpdatePayRate" asp-controller="Dispatch"  method="post">
+                        <input type="hidden" name="driverId" value="@driver.UserId" />
+                        <input type="number" step="0.01" name="newPayRate" placeholder="__$ Per KM" />
+                        <input type="submit" value="Update Pay Rate" />
+                    </form>
+                    @if (driver.Availability)
+                    {
+                        <a asp-action="RemoveDriverFromWorkPool" asp-route-driverId="@driver.UserId">Mark as Unavailable</a>
+                    }
+                    else
+                    {
+                        <a asp-action="AddDriverToWorkPool" asp-route-driverId="@driver.UserId">Mark as Available</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+

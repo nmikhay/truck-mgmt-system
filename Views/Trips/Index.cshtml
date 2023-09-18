@@ -1,0 +1,183 @@
+﻿@model IEnumerable<TMS_APP.Models.DTO.DriverTripViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Trips</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.trip.CustomerName)
+            </th>
+          
+            <th>
+                @Html.DisplayNameFor(model => model.trip.PickupLocationCity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.trip.PickupLocationCountry)
+            </th>
+           @*  <th>
+                @Html.DisplayNameFor(model => model.DeliveryLocationAddress)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.trip.DeliveryLocationCity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.trip.DeliveryLocationCountry)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.trip.PickupDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.trip.DeliveryDate)
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.ShipmentWeight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.trip.Status)
+            </th>
+             <th>
+                @Html.DisplayNameFor(model => model.trip.DriverId)
+            </th> 
+            <th></th>
+            <th style="width:120px;">Update Status</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.trip.CustomerName)
+            </td>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.PickupLocationAddress)
+            </td> *@
+            <td>
+                    @Html.DisplayFor(modelItem => item.trip.PickupLocationCity)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.trip.PickupLocationCountry)
+            </td>
+           @*  <td>
+                @Html.DisplayFor(modelItem => item.DeliveryLocationAddress)
+            </td> *@
+            <td>
+                    @Html.DisplayFor(modelItem => item.trip.DeliveryLocationCity)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.trip.DeliveryLocationCountry)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.trip.PickupDate)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.trip.DeliveryDate)
+            </td>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.ShipmentWeight)
+            </td> *@
+           @*  <td>
+                @Html.DisplayFor(modelItem => item.TotalAmount)
+            </td> *@
+           @*  <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td> *@
+            <td>
+                    @Html.DisplayFor(modelItem => item.trip.Status)
+            </td>
+             <td>
+                    @Html.DisplayFor(modelItem => item.trip.DriverId)
+            </td> 
+            <td>
+                 <div class="btn-group" role="group">
+                        <a asp-action="Edit" asp-route-id="@item.trip.Id" class="btn btn-primary"><i class="fa fa-pencil"></i>Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.trip.Id" class="btn btn-info"><i class="fa fa-eye"></i>Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.trip.Id" class="btn btn-danger"><i class="fa fa-trash"></i>Delete</a>
+                </div>
+                  
+            </td>
+            
+                    @if (item.trip.Status != TMS_APP.Constants.TripStatus.Unassigned)
+                    {
+                        <form asp-action="UpdateStatus" asp-controller="Trips" method="post">                            
+                                <td>
+                        <input type="hidden" name="tripId" value="@item.trip.Id" />
+                        <div class="form-group flex-row">
+                                        @*<label asp-for="@item.trip.Status" class="control-label"></label>*@
+                            <select asp-for="@item.trip.Status" name="newStatus" class="form-control">
+                                <option disabled selected>--Select Status--</option>
+                                <option value=5>Pending Assign</option>
+                                <option value=4>Assigned</option>
+                                <option value=3>Picked Up</option>
+                                <option value=2>In Progress</option>
+                                <option value=1>Delivered</option>
+                                <option value=0>Completed</option>
+                                <option value=6>Unassigned</option>
+
+                            </select>
+                            <span asp-validation-for="@item.Status"  class="text-danger"></span>
+                            <span id="alertMessage" class="text-danger"></span>
+                        </div>
+                        <span class="text-danger"></span>
+                                </td>
+                                <td>
+                        <div class="col-2"><input type="submit" value="update" /></div>
+                    </td>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-action="UpdateDriver" asp-controller="Trips" method="post">
+                            <td>
+                        <div class="form-group">
+                                <input type="hidden" name="tripId" value="@item.trip.Id" />
+                               @*<select asp-for="@item.trip.DriverId" name="selectedDriver" asp-items="@item.DriverList" class="form-select border-0 shadow">*@
+                            <select asp-for="@item.trip.DriverId" name="selectedDriver" asp-items="@item.DriverList" class="form-control">
+                                    <option disabled selected>--Select Driver--</option>
+                            </select>
+                                <span asp-validation-for="@item.trip.DriverId" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-2"><input type="submit" value="update" /></div>
+                    </td>
+                            
+                        </form>
+                    }
+                   
+            
+        </tr>
+        } 
+    </tbody>
+</table>
+@*@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            alert("@ViewBag.Message");
+        };
+    </script>
+}*@
+
+<script>
+    // Check if the ViewBag.AlertMessage is not null or empty
+    var alertMessage = '@ViewBag.Message';
+    if (alertMessage) {
+        // Display the alert message using JavaScript's alert() function
+        alert(alertMessage);
+    }
+</script>

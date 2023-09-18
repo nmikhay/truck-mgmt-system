@@ -1,0 +1,154 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_LayoutForDriver.cshtml";
+}
+@model TMS_APP.Models.DTO.PayViewModel
+
+@if (Model != null)
+{
+    <h1>Pay Advise</h1>
+
+    <div class="container-fluid">
+
+        <div>
+            <div>
+                <table class="table  table-bordered">
+                    <thead>
+                        <tr>
+                    <th>
+                        <strong>Pay Rate: </strong> @Model.PayRate
+                    </th>
+                    <th>
+                        <strong>My Total Trips: </strong> @Model.TotalTrips.Count()
+                    </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <hr />
+            <br />
+            <div class="row">
+                <div class="col col-10">
+            <h2>Current Trip and Pay Estimate</h2>
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>
+                            <strong>TripId: </strong>
+                        </th>
+                        <th>
+                            <strong>Mileage(KM) </strong>
+                        </th>
+                        <th><strong>Estimate Pay(CAD)</strong></th>
+                                <th> Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.UnfinishedPays!=null)
+                    {
+                        @foreach (var pay in Model.UnfinishedPays)
+                        {
+                            <tr>
+                                <td>
+                                    @pay.TripId
+                                </td>
+                                <td>
+                                    @pay.EstimateDistance
+                                </td>
+                                <td>
+                                    @pay.FinalPay
+                                </td>
+                                        <td>@pay.Note</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td> You have no estimate pay info here, or reach to your dispatcher</td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+            </div>
+            </div>
+            <hr />
+            <br />
+            <h2>Completed trips and Pay report</h2>
+            <div class="row">
+                <div class="col col-10">
+                    <table class="table  table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+
+                        <th>
+                            <strong>Completed Trips(TripID): </strong>
+                        </th>
+                        <th>
+                            <strong>Mileage(Km) </strong>
+                        </th>
+                        <th><strong>Pay(CAD)</strong></th>
+                                <th> Pay Date</th>
+                                <th> Note</th>
+                            </tr>
+                            
+                        </thead>
+                        <tbody>
+                            @if (Model.CompletedPays != null)
+                            {
+                                @foreach (var pay in Model.CompletedPays)
+                                {
+                                    <tr>
+                                        <td>
+                                            @pay.TripId
+                                        </td>
+                                        <td>
+                                            @pay.EstimateDistance
+                                        </td>
+                                        <td>
+                                            @pay.FinalPay
+                                        </td>
+                                        <td>@pay.PayDate</td>
+                                        <td>@pay.Note</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                            <tr>
+                                <td> You have no pay info here, or reach to your dispatcher</td>
+                            </tr>
+
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                @*<div class="col col-2">
+                    <form>
+                        <input type="text" hidden name="paySlipDate" />
+                        <input type="date" class="form-group" />
+                        <button type="submit">GO</button>
+                    </form>
+                </div>*@
+            </div>
+            <hr />
+            <br />
+           <div>
+               Chart goes here
+           </div>
+        </div>
+
+    </div>
+
+}else
+{
+    <div class="alert-danger">
+
+        <h3> The page ecountered some issue, please contact your admin!</h3>
+
+    </div>
+}

@@ -1,0 +1,247 @@
+﻿@model IEnumerable<TMS_APP.Models.Trip>
+
+@{
+    Layout = "~/Views/Shared/_LayoutForDriver.cshtml";
+}
+
+
+<h1>My Current Trips</h1>
+
+<div class="table-responsive">
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerName)
+            </th>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.PickupLocationCity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PickupLocationCountry)
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryLocationCity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryLocationCountry)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PickupDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryDate)
+            </th>
+         
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            @*  <th>
+            @Html.DisplayNameFor(model => model.DriverName)
+            </th>*@ 
+            <th>Check Trip</th>
+            <th> Note / Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+                if (item.Status != TMS_APP.Constants.TripStatus.Complete)
+                {
+                    <tr>
+                        <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PickupLocationCity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PickupLocationCountry)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeliveryLocationCity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeliveryLocationCountry)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PickupDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeliveryDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+            @*     <td>
+            @Html.DisplayFor(modelItem => item.DriverName)
+            </td> *@
+                <td>
+                <a asp-action="TripDetail" asp-route-id="@item.Id" class="btn btn-primary"><i class="fa fa-pencil"></i>Check Detail</a>
+                  @*  <form asp-action="TripsDetail" asp-controller="Trips" method="post">
+                    <div class="form-group">
+                        <input type="hidden" name="tripId" value="@item.Id" />
+                        
+                                    <input type="submit" value="Check Detail" />
+                    </div>
+                </form>*@
+
+                </td>
+                <td class="text-center">
+                            @if (item.Status == TMS_APP.Constants.TripStatus.PendingAssign)
+                            {
+                                <strong>*You can reject the trip by clicking "reject this Trip" in Trip detail page! </strong>
+                            }
+                            else if (item.Status == TMS_APP.Constants.TripStatus.Delevered)
+                            {
+                                @*<form asp-action="CompleteTrip" asp-controller="Driver" method="post">
+                                    <div class="form-group">
+                                        <input type="hidden" name="tripId" value="@item.Id" />
+                                        <input type="submit" value="Mark Completed" class="btn btn-primary" />
+                                    </div>
+                                </form>*@
+                                <strong>Please update the mileage and <br> wait for dispatcher mark the trip complete! </strong>
+
+                            }
+                            else if (item.Status == TMS_APP.Constants.TripStatus.Assigned)
+                            
+                            {
+                                <a asp-action="TripDetail" asp-route-id="@item.Id" class="btn btn-primary"><i class="fa fa-pencil"></i>Pick up Load</a>
+                            }
+                            else if (item.Status == TMS_APP.Constants.TripStatus.PickedUp)
+
+                            {
+                                <form asp-action="InTransportation" asp-controller="Driver" method="post">
+                                    <div class="form-group">
+                                        <input type="hidden" name="tripId" value="@item.Id" />
+                                        <input type="submit" value="Mark In Progress" class="btn btn-primary" />
+                                    </div>
+                                </form>
+                            }
+                            else if (item.Status == TMS_APP.Constants.TripStatus.InProgress)
+
+                            {
+                                <form asp-action="DeliveredTrip" asp-controller="Driver" method="post">
+                                    <div class="form-group">
+                                        <input type="hidden" name="tripId" value="@item.Id" />
+                                        <input type="submit" value="Mark Delivered" class="btn btn-primary" />
+                                    </div>
+                                </form>
+                            }
+                        </td>
+            </tr>
+            }
+        }
+    </tbody>
+</table>
+
+</div>
+
+<h1>My Completed Trips</h1>
+<div class="table-responsive">
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.CustomerName)
+            </th>
+
+            <th scope ="col">
+                @Html.DisplayNameFor(model => model.PickupLocationCity)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.PickupLocationCountry)
+            </th>
+
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.DeliveryLocationCity)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.DeliveryLocationCountry)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PickupDate)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.DeliveryDate)
+            </th>
+
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+           @* <th scope="col">
+                @Html.DisplayNameFor(model => model.DriverName)
+            </th>*@
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            if (item.Status==TMS_APP.Constants.TripStatus.Complete)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerName)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PickupLocationCity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PickupLocationCountry)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DeliveryLocationCity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DeliveryLocationCountry)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PickupDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DeliveryDate)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                  @*  <td>
+                        @Html.DisplayFor(modelItem => item.DriverName)
+                    </td>*@
+                    <td>
+
+                            <a asp-action="TripDetail" asp-route-id="@item.Id" class="btn btn-primary"><i class="fa fa-pencil"></i>Check Detail</a>
+                  
+                            @*    <form asp-action="TripsDetail" asp-controller="Trips" method="post">
+                        <div class="form-group">
+                            <input type="hidden" name="tripId" value="@item.Id" />
+                            <span asp-validation-for="@item.Id" class="text-danger"></span>
+                        </div>
+                        <div class="col-2"><input type="submit" value="Check Detail" /></div>
+                    </form>*@
+
+                    </td>
+                </tr>
+            }
+           
+        }
+    </tbody>
+</table>
+</div>
